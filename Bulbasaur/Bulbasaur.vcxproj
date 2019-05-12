@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SDL2\include;$(SolutionDir)GLFW\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SDL2\lib\x86;$(SolutionDir)GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -80,10 +80,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL3W;$(SolutionDir)ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,10 +129,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\GL3W\GL\gl3w.c" />
+    <ClCompile Include="..\ImGui\imgui.cpp" />
+    <ClCompile Include="..\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="..\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="..\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\ImGui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="..\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Bulbasaur.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\GL3W\GL\gl3w.h" />
+    <ClInclude Include="..\GL3W\GL\glcorearb.h" />
+    <ClInclude Include="..\ImGui\imconfig.h" />
+    <ClInclude Include="..\ImGui\imgui.h" />
+    <ClInclude Include="..\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\ImGui\imgui_impl_sdl.h" />
+    <ClInclude Include="..\ImGui\imgui_internal.h" />
+    <ClInclude Include="..\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="..\ImGui\imstb_textedit.h" />
+    <ClInclude Include="..\ImGui\imstb_truetype.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
