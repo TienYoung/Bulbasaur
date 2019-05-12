@@ -1,18 +1,23 @@
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
+#include <string>
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 640;
 
 bool init();
 
+SDL_Texture* loadTexture(std::string path);
+
 void close();
+
 
 SDL_Window* gWindow = nullptr;
 
 SDL_Renderer* gRenderer = nullptr;
 
-//SDL_Texture* gTexture = nullptr;
+SDL_Texture* gTexture = nullptr;
 
 int main(int argc, char* args[])
 {
@@ -27,6 +32,14 @@ int main(int argc, char* args[])
 
 		SDL_Event event;
 
+		gTexture = loadTexture("Resources/Bulbasaur.png");
+		SDL_Rect texRect;
+		SDL_QueryTexture(gTexture, nullptr, nullptr, &texRect.w, &texRect.h);		
+		texRect.x = SCREEN_WIDTH / 2 - texRect.w / 2;
+		texRect.y = SCREEN_HEIGHT / 2 - texRect.h / 2;
+		
+		//printf("%d, %d", texRect.w, texRect.h);
+
 		// Rendering loop
 		while (!bQuit)
 		{
@@ -39,6 +52,11 @@ int main(int argc, char* args[])
 			}
 
 			SDL_RenderClear(gRenderer);
+
+			SDL_RenderCopy(gRenderer, gTexture, nullptr, &texRect);
+
+			// Limit refresh rate
+			SDL_Delay(16);
 
 			SDL_RenderPresent(gRenderer);
 		}
@@ -83,13 +101,50 @@ bool init()
 
 			else
 			{
+				// Initialize renderer color
 				SDL_SetRenderDrawColor(gRenderer, 0x29, 0x6A, 0x54, 0xFF);
+			
+				// Initialize PNG loading
+				int imgFlags = IMG_INIT_PNG;
+				if (!(IMG_Init(imgFlags) & imgFlags))
+				{
+					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+					bSuccess = false;
+				}
 			}
 		}
 	}
 
 	return bSuccess;
 }
+
+SDL_Texture* loadTexture(std::string path)
+{
+	//The final texture
+	SDL_Texture* newTexture = nullptr;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	if (loadedSurface == nullptr)
+	{
+		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+	}
+	else
+	{
+		//Create texture from surface pixels
+		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		if (newTexture == nullptr)
+		{
+			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
+	}
+
+	return newTexture;
+}
+
 
 void close()
 {
