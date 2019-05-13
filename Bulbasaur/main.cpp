@@ -8,7 +8,6 @@
 #include "imgui_impl_opengl3.h"
 
 #include <GL/gl3w.h>
-//#include <glfw3.h>
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 640;
