@@ -19,6 +19,8 @@ SDL_Renderer* gRenderer = nullptr;
 
 SDL_Texture* gTexture = nullptr;
 
+SDL_Texture* gRenderTarget = nullptr;
+
 int main(int argc, char* args[])
 {
 	if (!init())
@@ -28,22 +30,24 @@ int main(int argc, char* args[])
 
 	else
 	{
-		bool bQuit = false;
-
-		SDL_Event event;
-
 		gTexture = loadTexture("Resources/Bulbasaur.png");
 		SDL_Rect texRect;
-		SDL_QueryTexture(gTexture, nullptr, nullptr, &texRect.w, &texRect.h);		
+		SDL_QueryTexture(gTexture, nullptr, nullptr, &texRect.w, &texRect.h);
 		texRect.x = SCREEN_WIDTH / 2 - texRect.w / 2;
 		texRect.y = SCREEN_HEIGHT / 2 - texRect.h / 2;
-		
 		//printf("%d, %d", texRect.w, texRect.h);
 
+		// Create a 512x512 canvas(RT texture)
+		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+
+		Uint32 PD[32][32] = { 0xffffffff };
+
 		// Rendering loop
+		bool bQuit = false;
 		while (!bQuit)
 		{
-			while (SDL_PollEvent(&event) != 0)
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
 			{
 				if (event.type == SDL_QUIT)
 				{
@@ -51,9 +55,23 @@ int main(int argc, char* args[])
 				}
 			}
 
+			SDL_SetRenderTarget(gRenderer, gRenderTarget);
+
 			SDL_RenderClear(gRenderer);
 
-			SDL_RenderCopy(gRenderer, gTexture, nullptr, &texRect);
+			SDL_RenderCopy(gRenderer, gTexture, nullptr, nullptr);
+
+			SDL_SetRenderTarget(gRenderer, nullptr);
+
+			SDL_RenderClear(gRenderer);
+//  			int pitch = 0;
+//  			SDL_LockTexture(gRenderTarget, &texRect, (void**)PD, &pitch);
+//  			SDL_UnlockTexture(gRenderTarget);
+
+			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &texRect);
+
+
+
 
 			// Limit refresh rate
 			SDL_Delay(16);
@@ -92,7 +110,7 @@ bool init()
 		else
 		{
 			// Create renderer for window
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 			if (gRenderer == nullptr)
 			{
 				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
