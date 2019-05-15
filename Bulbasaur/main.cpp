@@ -38,9 +38,9 @@ int main(int argc, char* args[])
 		//printf("%d, %d", texRect.w, texRect.h);
 
 		// Create a 512x512 canvas(RT texture)
-		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 32, 32);
 
-		Uint32 PD[32][32] = { 0xffffffff };
+		Uint32* PD = new Uint32[32 * 32];
 
 		// Rendering loop
 		bool bQuit = false;
@@ -55,18 +55,36 @@ int main(int argc, char* args[])
 				}
 			}
 
-			SDL_SetRenderTarget(gRenderer, gRenderTarget);
+			//SDL_SetRenderTarget(gRenderer, gRenderTarget);
+
+			/*SDL_RenderClear(gRenderer);*/
+
+			//SDL_RenderCopy(gRenderer, gTexture, nullptr, nullptr);
+
+			//SDL_SetRenderTarget(gRenderer, nullptr);
 
 			SDL_RenderClear(gRenderer);
+			void* mPixels;
+			int pitch = 0;
+ 			SDL_LockTexture(gRenderTarget,nullptr, &mPixels, &pitch);
+			for (int i = 0; i < 32; i++)
+			{
+				for (int j = 0; j < 32; j++)
+				{
+					//PD[i * 32 + j] = (((256 * 256 * 256) / (32 * 32) * (i * 32 + j)) << 8) | 0x000000ff;
+					PD[i * 32 + j] = ((256 / 32 * j) << 24) | ((256 / 32 * i) << 16) | ((256 / 32 * 0) << 8) | 0xFF;
+				}
 
-			SDL_RenderCopy(gRenderer, gTexture, nullptr, nullptr);
+			}
+			memcpy(mPixels, PD, 32 * 4 * 32);
 
-			SDL_SetRenderTarget(gRenderer, nullptr);
+			SDL_UnlockTexture(gRenderTarget);
 
-			SDL_RenderClear(gRenderer);
-//  			int pitch = 0;
-//  			SDL_LockTexture(gRenderTarget, &texRect, (void**)PD, &pitch);
-//  			SDL_UnlockTexture(gRenderTarget);
+			SDL_Rect rect;
+			rect.x = 0;
+			rect.y = 0;
+			rect.w = 32;
+			rect.h = 32;
 
 			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &texRect);
 
@@ -74,7 +92,7 @@ int main(int argc, char* args[])
 
 
 			// Limit refresh rate
-			SDL_Delay(16);
+			//SDL_Delay(16);
 
 			SDL_RenderPresent(gRenderer);
 		}
@@ -110,7 +128,7 @@ bool init()
 		else
 		{
 			// Create renderer for window
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 			if (gRenderer == nullptr)
 			{
 				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
