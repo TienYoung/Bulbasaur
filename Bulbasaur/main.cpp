@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <string>
 
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 640;
+const int WINDOW_WIDTH = 1024;
+const int WINDOW_HEIGHT = 640;
 
 bool init();
 
@@ -30,17 +30,18 @@ int main(int argc, char* args[])
 
 	else
 	{
-		gTexture = loadTexture("Resources/Bulbasaur.png");
-		SDL_Rect texRect;
-		SDL_QueryTexture(gTexture, nullptr, nullptr, &texRect.w, &texRect.h);
-		texRect.x = SCREEN_WIDTH / 2 - texRect.w / 2;
-		texRect.y = SCREEN_HEIGHT / 2 - texRect.h / 2;
-		//printf("%d, %d", texRect.w, texRect.h);
+// Bulbasaur image load
+// 		gTexture = loadTexture("Resources/Bulbasaur.png");
+// 		SDL_Rect texRect;
+// 		SDL_QueryTexture(gTexture, nullptr, nullptr, &texRect.w, &texRect.h);
+// 		texRect.x = SCREEN_WIDTH / 2 - texRect.w / 2;
+// 		texRect.y = SCREEN_HEIGHT / 2 - texRect.h / 2;
+// 		printf("%d, %d", texRect.w, texRect.h);
 
-		// Create a 512x512 canvas(RT texture)
-		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 32, 32);
+		// Create a window size canvas(RT texture)
+		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		Uint32* PD = new Uint32[32 * 32];
+		Uint32* PD = new Uint32[512 * 512];
 
 		// Rendering loop
 		bool bQuit = false;
@@ -67,26 +68,18 @@ int main(int argc, char* args[])
 			void* mPixels;
 			int pitch = 0;
  			SDL_LockTexture(gRenderTarget,nullptr, &mPixels, &pitch);
-			for (int i = 0; i < 32; i++)
-			{
-				for (int j = 0; j < 32; j++)
-				{
-					//PD[i * 32 + j] = (((256 * 256 * 256) / (32 * 32) * (i * 32 + j)) << 8) | 0x000000ff;
-					PD[i * 32 + j] = ((256 / 32 * j) << 24) | ((256 / 32 * i) << 16) | ((256 / 32 * 0) << 8) | 0xFF;
-				}
 
-			}
-			memcpy(mPixels, PD, 32 * 4 * 32);
+			memcpy(mPixels, PD, 512 * 4 * 512);
 
 			SDL_UnlockTexture(gRenderTarget);
 
 			SDL_Rect rect;
 			rect.x = 0;
 			rect.y = 0;
-			rect.w = 32;
-			rect.h = 32;
+			rect.w = 512;
+			rect.h = 512;
 
-			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &texRect);
+			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &rect);
 
 
 
@@ -118,7 +111,7 @@ bool init()
 	else
 	{
 		// Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 		if (gWindow == nullptr)
 		{
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
