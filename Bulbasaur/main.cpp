@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <string>
 
+#include "Canvas.h"
+#include "MathUtility.h"
+
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 640;
 
@@ -38,10 +41,17 @@ int main(int argc, char* args[])
 // 		texRect.y = SCREEN_HEIGHT / 2 - texRect.h / 2;
 // 		printf("%d, %d", texRect.w, texRect.h);
 
-		// Create a window size canvas(RT texture)
+		// Create a window size render target(texture) and canvas
 		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		Uint32* PD = new Uint32[512 * 512];
+		Canvas* cav = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+		for (int i = 0; i < cav->height; i++)
+		{
+			for (int j = 0; j < cav->width; j++)
+			{
+				Color temp(Random::GetUint32());
+				cav->DrawPixel(temp, j, i);
+			}
+		}
 
 		// Rendering loop
 		bool bQuit = false;
@@ -68,16 +78,14 @@ int main(int argc, char* args[])
 			void* mPixels;
 			int pitch = 0;
  			SDL_LockTexture(gRenderTarget,nullptr, &mPixels, &pitch);
-
-			memcpy(mPixels, PD, 512 * 4 * 512);
-
+			memcpy(mPixels, cav->PixelData, cav->width * 4 * cav->height);
 			SDL_UnlockTexture(gRenderTarget);
 
 			SDL_Rect rect;
 			rect.x = 0;
 			rect.y = 0;
-			rect.w = 512;
-			rect.h = 512;
+			rect.w = cav->width;
+			rect.h = cav->height;
 
 			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &rect);
 
