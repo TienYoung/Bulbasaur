@@ -81,19 +81,7 @@ int main(int argc, char* args[])
 			memcpy(mPixels, cav->PixelData, cav->width * 4 * cav->height);
 			SDL_UnlockTexture(gRenderTarget);
 
-			SDL_Rect rect;
-			rect.x = 0;
-			rect.y = 0;
-			rect.w = cav->width;
-			rect.h = cav->height;
-
-			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &rect);
-
-
-
-
-			// Limit refresh rate
-			//SDL_Delay(16);
+			SDL_RenderCopy(gRenderer, gRenderTarget, nullptr, &cav->rect);
 
 			SDL_RenderPresent(gRenderer);
 		}
