@@ -28,5 +28,13 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 	}
 
 	// Horizontal line
-
+	else if (y0 == y1)
+	{
+		int inc = (x0 < x1) ? 1 : -1;
+		for (int i = x0; i != x1; i += inc)
+		{
+			DrawPixel(c, i, y0);
+		}
+		DrawPixel(c, x1, y1);
+	}
 }
