@@ -15,7 +15,6 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 	{
 		DrawPixel(c, x0, y0);
 	}
-
 	// Vertical line
 	else if (x0 == x1)
 	{
@@ -26,7 +25,6 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 		}
 		DrawPixel(c, x1, y1);
 	}
-
 	// Horizontal line
 	else if (y0 == y1)
 	{
@@ -36,5 +34,26 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 			DrawPixel(c, i, y0);
 		}
 		DrawPixel(c, x1, y1);
+	}
+	else
+	{
+		int dx = x1 - x0;
+		int dy = y1 - y0;
+		
+		// increment direction
+		int ux = (dx < 0) ? -1 : 1;
+		int uy = (dy < 0) ? -1 : 1;
+
+
+		// Slope < 1
+		if (abs(dx) > abs(dy))
+		{
+			ux
+		}
+		// Slope >1
+		else
+		{
+
+		}
 	}
 }
