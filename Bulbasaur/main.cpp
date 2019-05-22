@@ -44,14 +44,14 @@ int main(int argc, char* args[])
 		// Create a window size render target(texture) and canvas
 		gRenderTarget = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
 		Canvas* cav = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
-		for (int y = 0; y < cav->height; y++)
-		{
-			for (int x = 0; x < cav->width; x++)
-			{
-				Color c(256.0f / cav->width * x, 256.0f / cav->height * y, 0);
-				cav->DrawPixel(c, x, y);
-			}
-		}
+// 		for (int y = 0; y < cav->height; y++)
+// 		{
+// 			for (int x = 0; x < cav->width; x++)
+// 			{
+// 				Color c(256.0f / cav->width * x, 256.0f / cav->height * y, 0);
+// 				cav->DrawPixel(c, x, y);
+// 			}
+// 		}
 
 		// Rendering loop
 		bool bQuit = false;
@@ -66,13 +66,10 @@ int main(int argc, char* args[])
 				}
 			}
 
-			//SDL_SetRenderTarget(gRenderer, gRenderTarget);
+			Color c(Random::GetUint32());
+			cav->DrawLine(c, cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
 
-			/*SDL_RenderClear(gRenderer);*/
 
-			//SDL_RenderCopy(gRenderer, gTexture, nullptr, nullptr);
-
-			//SDL_SetRenderTarget(gRenderer, nullptr);
 
 			SDL_RenderClear(gRenderer);
 			void* mPixels;

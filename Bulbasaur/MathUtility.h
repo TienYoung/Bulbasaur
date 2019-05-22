@@ -31,11 +31,18 @@ T inline Clamp(T value, T min, T max)
 
 namespace Random
 {
-	static std::uniform_int_distribution<Uint32> u(0, 0xFFFFFFFF);
 	static std::default_random_engine e;
+	static std::uniform_int_distribution<Uint32> i(0, 0xFFFFFFFF);
+	static std::uniform_real_distribution<float> r(0.0f, 1.0f);
+
 	static Uint32 GetUint32()
 	{
-		return u(e);
+		return i(e);
+	}
+
+	static float GetNormalizedFloat()
+	{
+		return r(e);
 	}
 };
 
