@@ -9,7 +9,6 @@ void Canvas::DrawPixel(Color& c, int x, int y)
 
 void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 {
-
 	// Line is a pixel
 	if (x0 == x1 && y0 == y1)
 	{
@@ -42,14 +41,15 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 		int dx = abs(x1 - x0);
 		int dy = abs(y1 - y0);
 
-		// Slope < 1
-		if (dx > dy)
+		// -1 <= Slope <= 1
+		if (dx >= dy)
 		{
 			// Accumulation
 			int acc = 0;
 			// increment direction
-			int inc = (x0 > x1) ? -1 : 1;
-			for (int x = x0, y = y0; x < x1 && y < y1; x += inc)
+			int incX = (x0 > x1) ? -1 : 1;
+			int incY = (y0 > y1) ? -1 : 1;
+			for (int x = x0, y = y0; x != x1 && y != y1; x += incX)
 			{
 				DrawPixel(c, x, y);
 				// Accumulate short side
@@ -58,19 +58,20 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 				{
 					// What the fuck
 					acc -= dx;
-					y += inc;
+					y += incY;
 				}
 			}
 			DrawPixel(c, x1, y1);
 		}
-		// Slope >1
+		// Slope > 1 || Slope < -1
 		else
 		{
 			// Accumulation
 			int acc = 0;
 			// increment direction
-			int inc = (y0 > y1) ? -1 : 1;
-			for (int x = x0, y = y0; x < x1 && y < y1; y += inc)
+			int incX = (x0 > x1) ? -1 : 1;
+			int incY = (y0 > y1) ? -1 : 1;
+			for (int x = x0, y = y0; x != x1 && y != y1; y += incY)
 			{
 				DrawPixel(c, x, y);
 				// Accumulate short side
@@ -78,8 +79,8 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 				if (acc >= dy)
 				{
 					// What the fuck
-					acc -= dx;
-					y += inc;
+					acc -= dy;
+					x += incX;
 				}
 			}
 			DrawPixel(c, x1, y1);
