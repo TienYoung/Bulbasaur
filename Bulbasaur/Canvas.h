@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include "Color.h"
-//#include "MathUtility.h"
+#include "MathUtility.h"
 
 class Canvas
 {
