@@ -1,10 +1,11 @@
 #include "Canvas.h"
 
-
-
 void Canvas::DrawPixel(Color& c, int x, int y)
 {
-	PixelData[x + y * width] = c.toUint32();
+	if (0 <= x && x < width && 0 <= y && y < height)
+	{
+		PixelData[x + y * width] = c.toUint32();
+	}
 }
 
 void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
