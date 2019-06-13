@@ -5,8 +5,12 @@
 #include <math.h>
 #include <random>
 
+#include "Vector3.h"
+#include "Vector4.h"
+
 // 计算插值：t 为 [0, 1] 之间的数值
-float inline LinearInterpolate(float x1, float x2, float t)
+template <typename T>
+T inline LinearInterpolate(const T& x1, const T& x2, T t)
 {
 	return x1 + (x2 - x1) * t;
 }

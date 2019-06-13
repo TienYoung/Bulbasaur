@@ -1,10 +1,10 @@
 #include "Vector4.h"
 
-// Vector4& Vector4::operator=(const Vector4& a)
-// {
-// 	x = a.x; y = a.y; z = a.z; w = a.w;
-// 	return *this;
-// }
+Vector4& Vector4::operator=(const Vector4& a)
+{
+	x = a.x; y = a.y; z = a.z; w = a.w;
+	return *this;
+}
 
 Vector4& Vector4::operator/=(float a)
 {
@@ -74,7 +74,7 @@ Vector4 Vector4::operator*(float a) const
 
 void Vector4::normalize()
 {
-	float length = Magnitude(*this);
+	float length = this->Length();
 	if (length != 0.0f) {
 		float inv = 1.0f / length;
 		x *= inv;
@@ -83,7 +83,7 @@ void Vector4::normalize()
 	}
 }
 
-float Vector4::operator*(const Vector4& a) const
+float Vector4::operator|(const Vector4& a) const
 {
 	return x * a.x + y * a.y + z * a.z;
 }
