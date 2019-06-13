@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include "Color.h"
-#include "MathUtility.h"
+#include "Vector.h"
 
 class Canvas
 {
@@ -21,15 +21,16 @@ public:
 		rect.h = height;
 	}
 
-	void DrawPixel(Color& c, int x, int y);
+	void DrawPixel(const Color& c, int x, int y);
 
 	// Bresenham's line algorithm
-	void DrawLine(Color& c, int x1, int y1, int x2, int y2);
+	void DrawLine(const Color& c, int x1, int y1, int x2, int y2);
 
-	// Bartcentric Coordinate Interpolate
+	// Tiangle rasterization
 	void DrawPrimitive(int x1, int y1, int x2, int y2, int x3, int y3);
 
-
+	// Get Barycentric Coordinate
+	static Vector3 GetBarycentricCoord(const Vector2& P1, const Vector2& P2, const Vector2& P3, const Vector2& P);
 };
 
 

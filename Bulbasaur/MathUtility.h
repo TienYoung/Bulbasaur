@@ -5,17 +5,16 @@
 #include <math.h>
 #include <random>
 
-#include "Vector3.h"
-#include "Vector4.h"
 
-// 计算插值：t 为 [0, 1] 之间的数值
-template <typename T>
-T inline LinearInterpolate(const T& x1, const T& x2, T t)
+// Linear Interpolate
+template <typename T1, typename T2>
+T1 inline LinearInterpolate(const T1& x1, const T1& x2, T2 t)
 {
 	return x1 + (x2 - x1) * t;
 }
 
-template <class T>
+// Math clamp
+template <typename T>
 T inline Clamp(T value, T min, T max)
 {
 	if (value < min)

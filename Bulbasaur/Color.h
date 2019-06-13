@@ -47,7 +47,8 @@ public:
 	Color operator*(const Color& c)const;
 	Color operator+(const Color& c)const;
 
-	Uint32 toUint32();
+	Uint32 toUint32() const;
+
 };
 
 #endif // !COLOR_H

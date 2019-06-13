@@ -74,7 +74,7 @@ public:
 	// 向量插值，t取值 [0, 1]
 	static inline Vector3 Leap(const Vector3& a, const Vector3& b, float t)
 	{
-		return LinearInterpolate(a, b, t); 
+		return LinearInterpolate(a, b, t);
 	}
 };
 

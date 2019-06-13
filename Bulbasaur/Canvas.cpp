@@ -1,6 +1,6 @@
 #include "Canvas.h"
 
-void Canvas::DrawPixel(Color& c, int x, int y)
+void Canvas::DrawPixel(const Color& c, int x, int y)
 {
 	if (0 <= x && x < width && 0 <= y && y < height)
 	{
@@ -8,7 +8,7 @@ void Canvas::DrawPixel(Color& c, int x, int y)
 	}
 }
 
-void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
+void Canvas::DrawLine(const Color& c, int x0, int y0, int x1, int y1)
 {
 	// Line is a pixel
 	if (x0 == x1 && y0 == y1)
@@ -92,4 +92,13 @@ void Canvas::DrawLine(Color& c, int x0, int y0, int x1, int y1)
 void Canvas::DrawPrimitive(int x1, int y1, int x2, int y2, int x3, int y3)
 {
 	float u, v, w;
+}
+
+Vector3 Canvas::GetBarycentricCoord(const Vector2& P1, const Vector2& P2, const Vector2& P3, const Vector2& P)
+{
+	float u = ((P2.y - P3.y) * P.x + (P3.x - P2.x) * P.y + (P2.x * P3.y - P3.x * P2.y)) / ((P2.y - P3.y) * P1.x + (P3.x - P2.x) * P1.y + (P2.x * P3.y - P3.x * P2.y));
+	float v = ((P1.y - P3.y) * P.x + (P3.x - P1.x) * P.y + (P1.x * P3.y - P3.x * P1.y)) / ((P1.y - P3.y) * P2.x + (P3.x - P1.x) * P2.y + (P1.x * P3.y - P3.x * P1.y));
+	float w = ((P1.y - P2.y) * P.x + (P2.x - P1.x) * P.y + (P1.x * P2.y - P2.x * P1.y)) / ((P1.y - P2.y) * P3.x + (P2.x - P1.x) * P3.y + (P1.x * P2.y - P2.x * P1.y));
+
+	return Vector3(u, v, w);
 }

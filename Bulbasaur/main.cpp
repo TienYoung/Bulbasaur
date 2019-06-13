@@ -53,6 +53,9 @@ int main(int argc, char* args[])
 // 			}
 // 		}
 
+		Vector3 BaryCoord = Canvas::GetBarycentricCoord(Vector2(1, 1), Vector2(3, 5), Vector2(4, 2), Vector2(1, 2));
+		printf("u=%f\nv=%f\nw=%f\n", BaryCoord.x, BaryCoord.y, BaryCoord.z);
+
 		// Rendering loop
 		bool bQuit = false;
 		while (!bQuit)
@@ -66,8 +69,7 @@ int main(int argc, char* args[])
 				}
 			}
 
-			Color c(Random::GetUint32());
-			cav->DrawLine(c, cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
+			cav->DrawLine(Color(Random::GetUint32()), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
 
 
 			SDL_RenderClear(gRenderer);
