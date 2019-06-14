@@ -89,9 +89,19 @@ void Canvas::DrawLine(const Color& c, int x0, int y0, int x1, int y1)
 	}
 }
 
-void Canvas::DrawPrimitive(int x1, int y1, int x2, int y2, int x3, int y3)
+void Canvas::DrawPrimitive(const Vector2& P1, const Vector2& P2, const Vector2& P3)
 {
-	float u, v, w;
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			Vector3  BaryCoord = GetBarycentricCoord(P1, P2, P3, Vector2(j, i));
+			if (BaryCoord.x >= 0 && BaryCoord.x <= 1 && BaryCoord.y >= 0 && BaryCoord.y <= 1 && BaryCoord.z >= 0 && BaryCoord.z <= 1)
+			{
+				DrawPixel(Color(0x9f2132FF), j, i);
+			}
+		}
+	}
 }
 
 Vector3 Canvas::GetBarycentricCoord(const Vector2& P1, const Vector2& P2, const Vector2& P3, const Vector2& P)
