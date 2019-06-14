@@ -5,6 +5,17 @@
 #include "Color.h"
 #include "Vector.h"
 
+struct vertex
+{
+	Vector2 p;
+	Color c;
+// 	vertex()
+// 	{
+// 		p = Vector2();
+// 		c = Color();
+// 	}
+};
+
 class Canvas
 {
 public:
@@ -27,11 +38,12 @@ public:
 	void DrawLine(const Color& c, int x1, int y1, int x2, int y2);
 
 	// Tiangle rasterization
-	void DrawPrimitive(const Vector2& P1, const Vector2& P2, const Vector2& P3);
+	void DrawPrimitive(const vertex& V1, const vertex& V2, const vertex& V3);
 
 	// Get Barycentric Coordinate
 	static Vector3 GetBarycentricCoord(const Vector2& P1, const Vector2& P2, const Vector2& P3, const Vector2& P);
 };
+
 
 
 #endif	// £¡CANVAS_H

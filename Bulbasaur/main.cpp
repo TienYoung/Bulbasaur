@@ -51,8 +51,16 @@ int main(int argc, char* args[])
 // 			{
 // 				Color c(256.0f / cav->width * x, 256.0f / cav->height * y, 0);
 // 				cav->DrawPixel(c, x, y);
-// 			}
+// 			} 
 // 		}
+
+		vertex triangle[3];
+		triangle[0].p = Vector2(512, 100);
+		triangle[1].p = Vector2(128, 480);
+		triangle[2].p = Vector2(896, 480);
+		triangle[0].c = Color(1.0f, 0.0f, 0.0f);
+		triangle[1].c = Color(0.0f, 1.0f, 0.0f);
+		triangle[2].c = Color(0.0f, 0.0f, 1.0f);
 
 		// Rendering loop
 		bool bQuit = false;
@@ -68,8 +76,7 @@ int main(int argc, char* args[])
 			}
 
 			//cav->DrawLine(Color(Random::GetUint32()), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
-			cav->DrawPrimitive(Vector2(200, 300), Vector2(300, 100), Vector2(700, 400));
-			cav->DrawPrimitive(Vector2(250, 300), Vector2(500, 900), Vector2(600, 200));
+			cav->DrawPrimitive(triangle[0], triangle[1], triangle[2]);
 
 			SDL_RenderClear(gRenderer);
 			void* mPixels;

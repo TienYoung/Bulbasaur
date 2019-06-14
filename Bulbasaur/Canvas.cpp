@@ -89,16 +89,24 @@ void Canvas::DrawLine(const Color& c, int x0, int y0, int x1, int y1)
 	}
 }
 
-void Canvas::DrawPrimitive(const Vector2& P1, const Vector2& P2, const Vector2& P3)
+
+void Canvas::DrawPrimitive(const vertex& V1, const vertex& V2, const vertex& V3)
 {
 	for (int i = 0; i < height; i++)
 	{
 		for (int j = 0; j < width; j++)
 		{
-			Vector3  BaryCoord = GetBarycentricCoord(P1, P2, P3, Vector2(j, i));
+			Vector3  BaryCoord = GetBarycentricCoord(V1.p, V2.p, V3.p, Vector2(j, i));
 			if (BaryCoord.x >= 0 && BaryCoord.x <= 1 && BaryCoord.y >= 0 && BaryCoord.y <= 1 && BaryCoord.z >= 0 && BaryCoord.z <= 1)
 			{
-				DrawPixel(Color(0x9f2132FF), j, i);
+// 				float threshold = -0.000001;
+// 				if (BaryCoord.x <threshold && BaryCoord.y < threshold && BaryCoord.z < threshold)
+// 				{
+// 					continue;
+// 				}
+				//Uint8 r = V1.c * BaryCoord.x;
+				Color temp(V1.c * BaryCoord.x + V2.c * BaryCoord.y + V3.c * BaryCoord.z);
+				DrawPixel(temp, j, i);
 			}
 		}
 	}
@@ -109,6 +117,7 @@ Vector3 Canvas::GetBarycentricCoord(const Vector2& P1, const Vector2& P2, const 
 	float u = ((P2.y - P3.y) * P.x + (P3.x - P2.x) * P.y + (P2.x * P3.y - P3.x * P2.y)) / ((P2.y - P3.y) * P1.x + (P3.x - P2.x) * P1.y + (P2.x * P3.y - P3.x * P2.y));
 	float v = ((P1.y - P3.y) * P.x + (P3.x - P1.x) * P.y + (P1.x * P3.y - P3.x * P1.y)) / ((P1.y - P3.y) * P2.x + (P3.x - P1.x) * P2.y + (P1.x * P3.y - P3.x * P1.y));
 	float w = ((P1.y - P2.y) * P.x + (P2.x - P1.x) * P.y + (P1.x * P2.y - P2.x * P1.y)) / ((P1.y - P2.y) * P3.x + (P2.x - P1.x) * P3.y + (P1.x * P2.y - P2.x * P1.y));
+	//float w = 1 - u - v;
 
 	return Vector3(u, v, w);
 }
