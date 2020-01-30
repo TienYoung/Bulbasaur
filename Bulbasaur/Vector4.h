@@ -12,14 +12,14 @@ public:
 	Vector4(float _x, float _y, float _z) :x(_x), y(_y), z(_z), w(1.0f) {}
 
 	// 重载赋值运算符并返回引用
-	//Vector4& operator=(const Vector4 &a);
+	Vector4& operator=(const Vector4 &a);
 
 	bool operator==(const Vector4& a) const;
 
 	bool operator!=(const Vector4& a) const;
 
 	// 向量点乘,重载"*"运算符
-	float operator*(const Vector4 & a) const;
+	float operator|(const Vector4 & a) const;
 
 	Vector4 operator-() const;
 
@@ -47,10 +47,9 @@ public:
 	void normalize();
 
 	// 向量模长
-	static inline float Magnitude(const Vector4& a)
+	inline float Length()
 	{
-		float sq = a.x * a.x + a.y * a.y + a.z * a.z;
-		return sqrtf(sq);
+		return sqrtf(*this | *this);
 	}
 
 	// 向量叉乘
@@ -75,7 +74,7 @@ public:
 	// 向量插值，t取值 [0, 1]
 	static inline Vector4 Leap(const Vector4 & a, const Vector4 & b, float t)
 	{
-		return Vector4(a + (b - a) * t);
+		return LinearInterpolate(a, b, t);
 	}
 };
 

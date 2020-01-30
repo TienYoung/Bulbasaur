@@ -24,6 +24,7 @@ SDL_Texture* gTexture = nullptr;
 
 SDL_Texture* gRenderTarget = nullptr;
 
+
 int main(int argc, char* args[])
 {
 	if (!init())
@@ -50,8 +51,16 @@ int main(int argc, char* args[])
 // 			{
 // 				Color c(256.0f / cav->width * x, 256.0f / cav->height * y, 0);
 // 				cav->DrawPixel(c, x, y);
-// 			}
+// 			} 
 // 		}
+
+		vertex triangle[3];
+		triangle[0].p = Vector2(512, 100);
+		triangle[1].p = Vector2(128, 480);
+		triangle[2].p = Vector2(896, 480);
+		triangle[0].c = Color(1.0f, 0.0f, 0.0f);
+		triangle[1].c = Color(0.0f, 1.0f, 0.0f);
+		triangle[2].c = Color(0.0f, 0.0f, 1.0f);
 
 		// Rendering loop
 		bool bQuit = false;
@@ -66,10 +75,8 @@ int main(int argc, char* args[])
 				}
 			}
 
-			Color c(Random::GetUint32());
-			cav->DrawLine(c, cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
-
-
+			//cav->DrawLine(Color(Random::GetUint32()), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat(), cav->width * Random::GetNormalizedFloat(), cav->height * Random::GetNormalizedFloat());
+			cav->DrawPrimitive(triangle[0], triangle[1], triangle[2]);
 
 			SDL_RenderClear(gRenderer);
 			void* mPixels;
@@ -104,7 +111,7 @@ bool init()
 	else
 	{
 		// Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("Bulbasaur Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 		if (gWindow == nullptr)
 		{
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
